@@ -45,7 +45,7 @@ cp -n $wd2'/distance.tsv' .
 python3 $abs/data_preparation.py
 
 echo "
-Dividing samples for condition.. and calculating group-specific allele frequency"
+Calculating frequency"
 
 if [[ $e == "on" ]] ; then Rscript $abs/ethnicity.R ; fi 
 
@@ -82,4 +82,5 @@ rm freq_hla* hla_* hlaST_*
 #rm sequence.fa distance.tsv info.tsv supertypes.xls
 rm *.Rout 
 
-echo "Analysis completed!"
+echo "
+Analysis completed!"

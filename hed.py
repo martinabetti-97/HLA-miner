@@ -77,10 +77,23 @@ def distance_matrix():
     df=pd.DataFrame(table,columns=['patient','A','B','C','mean'])
     df=df.set_index('patient')
     df.to_csv('HED.tsv', sep='\t')
+    return df
 
 distance_matrix()    
 
 #----------------------categorical matrix (sampleXgene)--------------------
 
 def assign_category(matrix):
+    matrix=matrix.replace({'nan': None})
+    matrix=matrix.dropna()
+    for gene in ['A','B','C']:
+        m= matrix[gene].mean()
+        category= matrix[gene] > m
+        matrix[gene]=category
+    matrix=matrix.replace({True:'high', False:'low'})
+    matrix=matrix.drop(columns='mean')
+    matrix.to_csv('HED_cat.tsv', sep='\t')
+    return matrix
+    
+assign_category(distance_matrix())
 

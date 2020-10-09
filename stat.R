@@ -8,13 +8,14 @@ library(ggplot2)
 #---------------------importing and filtering data-------------------------
 
 info <- read.table('info.tsv', sep='\t',header=TRUE)
+groups<-split(info,info$group)
+n_R<-dim(groups$R)[1]
+n_NR<-dim(groups$NR)[1]
 A <- read.table('A_homoCounts.tsv',sep='\t',row.names=1,header=TRUE)
 B <- read.table('B_homoCounts.tsv',sep='\t',row.names=1,header=TRUE)
 C <- read.table('C_homoCounts.tsv',sep='\t',row.names=1,header=TRUE)
-all_freq <- read.table('resp_a_freq.tsv',sep='\t',row.names=1,header=TRUE)
-sup_freq <- read.table('resp_st_freq.tsv',sep='\t',row.names=1,header=TRUE)
-all_freq <- all_freq[,2:3]
-sup_freq <- sup_freq[,2:3]
+all_pa<- read.table('count_a.tsv',sep='\t',row.names=1,header=TRUE)
+sup_pa <- read.table('count_st.tsv',sep='\t',row.names=1,header=TRUE)
 info <- info[,1:2]
 hed1<-read.table("HED.tsv",sep='\t',header=TRUE)
 hed2<-read.table("HED_cat.tsv",sep='\t',header=TRUE)
@@ -91,19 +92,23 @@ hed_stat("B",info,a)
 hed_stat("C",info,a)
 
 #-----------------------------fisher on freq-------------------------------
-f <- function(x) {
-d <- c(x[1],1-x[1],x[2],1-x[2])
+pvalues<-c()
+f <- function(y) {
+d <- c(y[1],n_R-y[1],y[2],n_NR-y[2])
 t=matrix(d, nrow = 2, ncol = 2)
 m=matrix(unlist(t),2)
 ft=fisher.test(m)
-if (ft$p.value<0.05) {
-sink(file ='freq_fisher.txt', append = TRUE, type = "output")
-print(ft$p.value)
-sink(file = NULL)}
+pvalues<-c(pvalues, ft$p.value)
+return (pvalues)
 }
 
-apply(all_freq, 1, f)
-apply(sup_freq, 1, f)
 
+
+sink(file ='fisher.txt', append = TRUE, type = "output")
+print('Alleles')
+print(apply(all_pa,1, f))
+print('Supertypes')
+print(apply(sup_pa,1, f))
+sink(file = NULL)
 quit()
 

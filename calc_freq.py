@@ -92,6 +92,35 @@ merge("freq_hlaST.tsv",re,"resp_st")
 #frequency table for ethnic groups (optional)
 if e == 'on':
     merge("freq_hla.tsv",et,"ethnicity")
+    
+#-------------------------------presence/absence---------------------------
+def counts(df,group):
+    d={}
+    for gene in ['A','B','C']:
+        col1 = df[f'{gene}1'].values.tolist()
+        col2 = df[f'{gene}2'].values.tolist() 
+        d1 = dict.fromkeys(col1+col2,0)
+        for i in range(len(col1)):
+            d1[col1[i]]=d1[col1[i]]+1
+            if col1[i] != col2[i]:
+                d1[col2[i]]=d1[col2[i]]+1   
+        d.update(d1)    
+    df = pd.DataFrame.from_dict(data=d, orient='index')
+    df.columns=[group]
+    return df
+
+def export(out,input):
+    R_all = pd.read_csv(f"{input}_R.tsv", sep='\t', header = 0,index_col=0)
+    NR_all = pd.read_csv(f"{input}_NR.tsv", sep='\t', header = 0,index_col=0)
+    R=counts(R_all,'R')
+    NR=counts(NR_all,'NR')
+    df=R.join(NR,how='outer')
+    df.fillna(0, inplace=True) 
+    df.to_csv(f'{out}.tsv', sep='\t')
+    return df
+
+export("count_st","hlaST")
+export("count_a","hla")
 
 #------------------------------homozygosity--------------------------------
 
@@ -165,11 +194,13 @@ alleles= alleles.sort_index()
 alleles.plot.bar(rot=90,stacked=True,color={"#E6E6FA","#778899"})
 plt.tight_layout()
 plt.savefig('homoAlleles_barplot.png',pad_inches=4, dpi=300)
+plt.cla()
 
 #boxplot
 df_a = merge("freq_hla.tsv",re,"resp_a")
 df_st= merge("freq_hlaST.tsv",re,"resp_st")
 bp_a = df_a.boxplot(column=['diff'])
 plt.savefig("diff_a_boxplot.png")
+plt.cla()
 bp_st = df_st.boxplot(column=['diff'])
 plt.savefig("diff_st_boxplot.png")

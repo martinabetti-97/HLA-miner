@@ -31,7 +31,7 @@ R modules:
 - Orange boxes are the files produced by external data processing.
 - Grey boxes represent the output of the analysis.
 
-![flow](files/flowchart.jpg)
+![flowchart](files/flow.jpg)
 
 ## Usage
 All the scripts must be launched from the HLA-typing directory. 
@@ -87,43 +87,42 @@ This tsv file is used to convert HLA alleles into more general supertypes accord
 
 #### Results
 The produced results are listed below:
-1. Division of the samples analyzed into subgroups based on response and ethnicity; association of single alleles to correspondent supertypes.
-	- **hlaST.tsv** - present the same structure and content of the file "hla.tsv" but reports supertype associated to alleles. Unknown supertypes are omitted.
-	- **ids.tsv** - info file on sample ids substitution.
+1. **TSV** 
+	- **hlaST** - present the same structure and content of the file "hla.tsv" but reports supertype associated to alleles. Unknown supertypes are omitted.
+	- **ids** - info file on sample ids substitution.
+	- **ethnicity_freq** - The relative frequency of occurence of any allele predicted from the primary analysis is calculated and added to the table accordingly with the ethnicity that the individual is labeled with. If it is not known the "global" must be assigned.
+	- **resp_a_freq** - The relative frequency of occurence of any allele predicted from the primary analysis is calculated and added to the table accordingly to the response group that the individual is labeled with.
+	- **resp_st_freq** - Same information given by resp_a_freq.tsv but based on supertypes rather than single alleles. Gene C is not included in this classification.
+	- **homo_freq** - The frequency of homozygosity for each gene (A, B and C) is calculated globally and for the two response groups.
+	- **A/B/C_homoCounts** - Counts of homozigous vs. heterozigous patients for genes A, B and C. 
+	- **HED** - Each individual is assigned with the distance between his couple of alleles for gene A, B and C separately and with a mean distance value between these three.
+	- **HED_cat** - Each individual is assigned with a categorical value "high" or "low" based on the mean distance for each gene A, B and C separately.
+	- **count_a**, **count_st** - counts of individuals that present specidic alleles and supertypes (homozygosity counts once).
 	
-2. Calculation of allele frequencies in a group specific way. Produced files:
-	- **ethnicity_freq.tsv** - The relative frequency of occurence of any allele predicted from the primary analysis is calculated and added to the table accordingly with the ethnicity that the individual is labeled with. If it is not known the "global" must be assigned.
-	- **resp_a_freq.tsv** - The relative frequency of occurence of any allele predicted from the primary analysis is calculated and added to the table accordingly to the response group that the individual is labeled with.
-	- **resp_st_freq.tsv** - Same information given by resp_a_freq.tsv but based on supertypes rather than single alleles. Gene C is not included in this classification.
-	- **diff_a_boxplot.png** - Boxplot of allele frequency distance distribution.
-	- **diff_st_boxplot.png** -  Boxplot of supertype frequency distance distribution.
+2. **PNG**
+	- **diff_a_boxplot** - Boxplot of allele frequency distance distribution.
+	- **diff_st_boxplot** -  Boxplot of supertype frequency distance distribution.
+	- **homoGene_barplot** - Comparison between homozygosity frequency in R vs. NR for genes A, B and C.
+	- **homoAllele_barplot** - Comparison between normalized counts of homozygosity for specific alleles.
+	- **groups** - individuals are grouped based on the response group they are labeled with.
+	- **biplot** - individuals are clustered depending on their response group and related variables are shown.
+	- **contibution** . percentage of variance explained.
+	- **variables** - categorical variables are plotted accordingly to their similarity and are filtered and coloured according to their cos2.
+	- **HED_heatmap** - A heatmap which represents the distance between alleles in all patients. An additional annotation boxplot informs on the variability of distances for the three genes while another specify to which group the patient belongs. Patient clustering is provided.
+	- **ethn_freq_heatmap** - A heatmap that highlights defferences in the allele frequency among different ethnic groups. 
+	- **response_freq_heatmap** - graphic representation of allele frequency for the two response groups with an annotation of distance in allele frequency between the two groups.
+	- **responseST_freq_heatmap** - graphic representation of allele frequency for the two response groups based on supertypes rather than single alleles.
+	- **A/B/C_circleplot**, **A/B/C_ST_circleplot** - graphic representation of alleles co-occurence in responders vs. non-responders for the three genes.
+	- **diff_a_boxplot**, **diff_st_boxplot** - plot of frequency distance distribution for alleles (a) and supetypes (st).
+	- **homoAlleles_barplot** - stacked barplot for normalized counts of the incidence of a single allele in the homozygosity event for group R and NR.
+	- **homoGenes_barplot** - homozygosity event frequency for genes A, B and C in group N and NR.
 	
-3. Homozygosity frequencies and alleles of interest.
-	- **homo_freq.tsv** - The frequency of homozygosity for each gene (A, B and C) is calculated globally and for the two response groups.
-	- **homo_info.txt** - Individuals affected by homozgosity are listed and the allele they are homozygous for is specified.
-	- **A/B/C_homoCounts.tsv** - Counts of homozigous vs. heterozigous patients for genes A, B and C. 
-	- **homo_fisher.txt** - Checking categorical indipendence between homozygosity and response to treatments. Results are reported for single genes.
-	- **homoGene_barplot.png** - Comparison between homozygosity frequency in R vs. NR for genes A, B and C.
-	- **homoAllele_barplot.png** - Comparison between normalized counts of homozygosity for specific alleles.
+3. **TXT**
+	- **HED_wilcox** - Wilcox test resuts on genes A, B and C.
+	- **HED_MCA** - in this file all the quantitative info reguarding the MCA anlysis are reported.
+	- **homo_fisher** - Checking categorical indipendence between homozygosity and response to treatments. Results are reported for single genes.
+	- **freq_fisher** - Checking categorical indipendence between frequencies and response to treatments. Results are reported for single alleles and supertypes based on presence vs absence of those.
 	
-4. Calculation of Grantham distance for alleles co-occuring in an individual.
-	- **HED.tsv** - Each individual is assigned with the distance between his couple of alleles for gene A, B and C separately and with a mean distance value between these three.
-	- **HED_wilcox.txt** - Wilcox test resuts on genes A, B and C.
-	
-5. MCA analysis on HED categories and relative plots.
-	- **groups.png** - individuals are grouped based on the response group they are labeled with.
-	- **biplot.png** - individuals are clustered depending on their response group and related variables are shown.
-	- **contibution.png** . percentage of variance explained.
-	- **variables.png** - categorical variables are plotted accordingly to their similarity and are filtered and coloured according to their cos2.
-	- **MCA.txt** - in this file all the quantitative data reguarding the MCA anlysis are reported.
-	
-6. Production of heatmaps and circular graphs.
-	- **HED_heatmap.png** - A heatmap which represents the distance between alleles in all patients. An additional annotation boxplot informs on the variability of distances for the three genes while another specify to which group the patient belongs. Patient clustering is provided.
-	- **ethn_freq_heatmap.png** - A heatmap that highlights defferences in the allele frequency among different ethnic groups. 
-	- **response_freq_heatmap.png** - graphic representation of allele frequency for the two response groups with an annotation of distance in allele frequency between the two groups.
-	- **responseST_freq_heatmap.png** - graphic representation of allele frequency for the two response groups based on supertypes rather than single alleles.
-	- **A/B/C_circleplot.png**, **A/B/C_ST_circleplot.png** - graphic representation of alleles co-occurence in responders vs. non-responders for the three genes.
-
 --------------------------------------------
 ## Test
 Primary analysis:
@@ -138,3 +137,6 @@ bash secondary_analysis.sh -i /abs/path/to/test/info.tsv -f /abs/path/to/test/hl
 -------------------------------------------
 ## References
 
+Szolek, A., Schubert, B., Mohr, C., Sturm, M., Feldhahn, M., & Kohlbacher, O. (2014). OptiType: precision HLA typing from next-generation sequencing data. Bioinformatics (Oxford, England), 30(23), 3310–3316. https://doi.org/10.1093/bioinformatics/btu548
+
+Li H. and Durbin R. (2009) Fast and accurate short read alignment with Burrows-Wheeler Transform. Bioinformatics, 25:1754-60. [PMID: 19451168]

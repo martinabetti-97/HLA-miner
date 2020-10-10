@@ -31,7 +31,7 @@ R modules:
 - Orange boxes are the files produced by external data processing.
 - Grey boxes represent the output of the analysis.
 
-![flowchart](files/flowchart.jpg)
+![flow](files/flowchart.jpg)
 
 ## Usage
 All the scripts must be launched from the HLA-typing directory. 

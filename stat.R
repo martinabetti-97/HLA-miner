@@ -71,8 +71,8 @@ print("Gene C")
 fisher.test(C)
 sink(file = NULL)
 
-#--------------------------------wilkoxtest--------------------------------
-hed=as.matrix(hed1)
+#--------------------------------wilkoxon test------------------------------
+hed=apply(as.matrix(hed1), 1, function(row) all(row !=0 ))
 hed_stat <- function(gene,info,hed) { 
 hed<-as.data.frame(hed)
 df<-cbind(hed[[gene]],info$group)
@@ -104,7 +104,7 @@ return (pvalues)
 
 
 
-sink(file ='fisher_allele.txt', append = TRUE, type = "output")
+sink(file ='freq_fisher.txt', append = TRUE, type = "output")
 print('Alleles')
 print(apply(all_pa,1, f))
 print('Supertypes')

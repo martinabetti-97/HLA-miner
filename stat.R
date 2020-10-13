@@ -87,9 +87,9 @@ print(wilcox.test(distance ~ group, data = df, exact = FALSE))
 sink(file = NULL)
 }
 
-hed_stat("A",info,a)
-hed_stat("B",info,a)
-hed_stat("C",info,a)
+hed_stat("A",info,hed)
+hed_stat("B",info,hed)
+hed_stat("C",info,hed)
 
 #-----------------------------fisher on freq-------------------------------
 pvalues<-c()
@@ -104,11 +104,10 @@ return (pvalues)
 
 
 
-sink(file ='fisher.txt', append = TRUE, type = "output")
+sink(file ='fisher_allele.txt', append = TRUE, type = "output")
 print('Alleles')
 print(apply(all_pa,1, f))
 print('Supertypes')
 print(apply(sup_pa,1, f))
 sink(file = NULL)
 quit()
-

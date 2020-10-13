@@ -72,7 +72,8 @@ fisher.test(C)
 sink(file = NULL)
 
 #--------------------------------wilkoxon test------------------------------
-hed=apply(as.matrix(hed1), 1, function(row) all(row !=0 ))
+row_sub=apply(as.matrix(hed1), 1, function(row) all(row !=0 ))
+hed=hed1[row_sub,]
 hed_stat <- function(gene,info,hed) { 
 hed<-as.data.frame(hed)
 df<-cbind(hed[[gene]],info$group)
